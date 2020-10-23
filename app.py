@@ -2,11 +2,15 @@ import json
 import struct
 import requests
 
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, send_file
+from flask_swagger_ui import get_swaggerui_blueprint
 from apscheduler.schedulers.background import BackgroundScheduler
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static')
 scheduler = BackgroundScheduler()
+
+swaggerui_blueprint = get_swaggerui_blueprint('/api/docs', '/static/api.yaml')
+app.register_blueprint(swaggerui_blueprint)
 
 authors = {}
 counts = {}
