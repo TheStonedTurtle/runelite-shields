@@ -2,7 +2,7 @@ import json
 import struct
 import requests
 
-from flask import Flask, render_template, redirect, send_file
+from flask import Flask, render_template
 from flask_swagger_ui import get_swaggerui_blueprint
 from apscheduler.schedulers.background import BackgroundScheduler
 
@@ -57,11 +57,8 @@ def updateCounts():
     stats = {k: v for k, v in sorted(stats.items(), key=lambda item: item[1], reverse=True)}
 
 
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')  # Catch all and redirect to main route '/'
-def get(path):
-    if len(path) > 0:
-        return redirect('/', 303)
+@app.route('/')
+def get():
     return render_template('index.html')
 
 
