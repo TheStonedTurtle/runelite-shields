@@ -61,6 +61,11 @@ def get(path):
     return render_template('index.html')
 
 
+@app.route('/leaderboards')
+def getLeaderboards():
+    return render_template('leaderboards.html', cols=["Rank", "Author", "Total Installs"], rows=counts)
+
+
 # API section
 @app.route('/installs/author/<username>')
 def getAuthorInstalls(username):
