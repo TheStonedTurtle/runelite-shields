@@ -17,7 +17,7 @@ counts = {}
 stats = {}
 
 
-@scheduler.scheduled_job('interval', minutes=30)
+@scheduler.scheduled_job('interval', minutes=15)
 def updateCounts():
     global authors, counts, stats
     authors.clear()
@@ -137,7 +137,7 @@ def generateShieldJson(count: int, label="Total installs"):
     }
 
 
-# Initialize counts and schedule them for every 30 minutes
+# Initialize counts and schedule them for every 15 minutes
 updateCounts()
 scheduler.start()
 
