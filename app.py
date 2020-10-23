@@ -2,7 +2,7 @@ import json
 import struct
 import requests
 
-from flask import Flask
+from flask import Flask, render_template, redirect
 from apscheduler.schedulers.background import BackgroundScheduler
 
 app = Flask(__name__)
@@ -13,7 +13,7 @@ counts = {}
 stats = {}
 
 
-@scheduler.scheduled_job('interval', minutes=15)
+@scheduler.scheduled_job('interval', minutes=30)
 def updateCounts():
     global authors, counts, stats
     authors.clear()
@@ -53,6 +53,15 @@ def updateCounts():
     stats = {k: v for k, v in sorted(stats.items(), key=lambda item: item[1], reverse=True)}
 
 
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')  # Catch all and redirect to main route '/'
+def get(path):
+    if len(path) > 0:
+        return redirect('/', 303)
+    return render_template('index.html')
+
+
+# API section
 @app.route('/installs/author/<username>')
 def getAuthorInstalls(username):
     username = str(username).strip().lower()
@@ -122,7 +131,7 @@ def generateShieldJson(count: int, label="Total installs"):
     }
 
 
-# Initialize counts and schedule them for every 15 minutes
+# Initialize counts and schedule them for every 30 minutes
 updateCounts()
 scheduler.start()
 
