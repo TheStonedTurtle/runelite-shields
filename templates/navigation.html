@@ -42,6 +42,7 @@
         {% for link in nav %}
             <a href="{{link.url}}"
                class={% if link.name|lower == active_page|lower %}"nav-link active"{% else %}"nav-link"{% endif %}
+               {% if link.url == '/api/docs' %}target="_blank"{% endif %}
             >
                 {{link.name}}
             </a>
