@@ -1,0 +1,51 @@
+{% set active_page = active_page|default('home') -%}
+{% set nav = [
+        {'name': 'Home', 'url': '/'},
+        {'name': 'API Docs', 'url': '/api/docs'},
+        {'name': 'Leaderboards', 'url': '/leaderboards'},
+    ]
+-%}
+<style>
+    header{
+        margin-bottom: 25px;
+    }
+    .masthead-brand{
+        float: left;
+    }
+    nav.nav{
+        float: right;
+    }
+
+    .nav-link {
+        padding: .25rem .5rem;
+        font-weight: 700;
+        color: rgba(255, 255, 255, .5);
+        background-color: transparent;
+        border-bottom: .25rem solid transparent;
+        border-bottom-color: transparent;
+    }
+
+    .nav-link:hover {
+        color: rgba(255, 255, 255, .75) !important;
+        border-bottom-color: rgb(48, 52, 54, .75) !important;
+    }
+
+    .nav-link.active {
+        color: rgb(232, 230, 227);
+        border-bottom-color: rgb(100, 100, 100, .45);
+    }
+</style>
+
+<header>
+    <h3 class="masthead-brand">Plugin Hub Info</h3>
+    <nav class="nav nav-masthead justify-content-center">
+        {% for link in nav %}
+            <a href="{{link.url}}"
+               class={% if link.name|lower == active_page|lower %}"nav-link active"{% else %}"nav-link"{% endif %}
+               {% if link.url == '/api/docs' %}target="_blank"{% endif %}
+            >
+                {{link.name}}
+            </a>
+        {% endfor %}
+    </nav>
+</header>

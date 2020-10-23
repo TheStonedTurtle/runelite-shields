@@ -1,0 +1,179 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: "Plugin Hub Info"
+  description: "This is a simple API for grabbing the current [RuneLite Plugin Hub](https://runelite.net/plugin-hub) stats for specific plugins or authors. These stats are intended to be used for generating [README shields](https://shields.io) and are updated every 15 minutes."
+  contact:
+    name: "TheStonedTurtle"
+    url: "https://github.com/TheStonedTurtle"
+  license:
+    name: "MIT"
+    url: "http://opensource.org/licenses/MIT"
+tags:
+- name: "shields"
+  description: "JSON endpoints for use with https://shields.io/endpoint to dynamically generate the shields"
+paths:
+  /installs/author/{author}:
+    get:
+      summary: "Returns the total amount of installs for the author across all of their plugins"
+      parameters:
+        - in: path
+          name: author
+          type: string
+          required: true
+          description: "The `author` of any plugin hub plugin"
+      produces:
+        - "text/plain"
+      responses:
+        200:
+          description: OK
+          schema:
+            type: integer
+            example: 73
+  /installs/plugin/{plugin-name}:
+    get:
+      summary: "Returns the amount of installs for the specific plugin"
+      parameters:
+        - in: path
+          name: plugin-name
+          type: string
+          required: true
+          description: "The `internalName` of the plugin"
+      produces:
+        - "text/plain"
+      responses:
+        200:
+          description: OK
+          schema:
+            type: integer
+            example: 73
+  /rank/author/{author}:
+    get:
+      summary: "Returns the rank for the author based on their total installs"
+      parameters:
+        - in: path
+          name: author
+          type: string
+          required: true
+          description: "The `author` of any plugin hub plugin"
+      produces:
+        - "text/plain"
+      responses:
+        200:
+          description: OK
+          schema:
+            type: integer
+            example: 73
+  /rank/plugin/{plugin-name}:
+    get:
+      summary: "Returns the rank for the specific plugin based on total installs"
+      parameters:
+        - in: path
+          name: plugin-name
+          type: string
+          required: true
+          description: "The `internalName` of the plugin"
+      produces:
+        - "text/plain"
+      responses:
+        200:
+          description: OK
+          schema:
+            type: integer
+            example: 73
+  /shields/installs/author/{author}:
+    get:
+      tags:
+        - "shields"
+      summary: "Returns the total amount of installs for the author across all of their plugins"
+      parameters:
+        - in: path
+          name: author
+          type: string
+          required: true
+          description: "The `author` of any plugin hub plugin"
+      produces:
+        - "text/plain"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Shield'
+  /shields/installs/plugin/{plugin-name}:
+    get:
+      tags:
+        - "shields"
+      summary: "Returns the amount of installs for the specific plugin"
+      parameters:
+        - in: path
+          name: plugin-name
+          type: string
+          required: true
+          description: "The `internalName` of the plugin"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Shield'
+  /shields/rank/author/{author}:
+    get:
+      tags:
+        - "shields"
+      summary: "Returns the rank for the author based on their total installs"
+      parameters:
+        - in: path
+          name: author
+          type: string
+          required: true
+          description: "The `author` of any plugin hub plugin"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Shield'
+  /shields/rank/plugin/{plugin-name}:
+    get:
+      tags:
+        - "shields"
+      summary: "Returns the rank for the specific plugin based on total installs"
+      parameters:
+        - in: path
+          name: plugin-name
+          type: string
+          required: true
+          description: "The `internalName` of the plugin"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Shield'
+definitions:
+  Shield:
+    type: "object"
+    description: "JSON format for use with https://shields.io/endpoint"
+    required:
+    - "schemaVersion"
+    - "label"
+    - "message"
+    properties:
+      schemaVersion:
+        type: integer
+        example: 1
+      label:
+        type: string
+        example: "Total installs"
+      message:
+        type: string
+        example: "73"
+      color:
+        type: string
+        example: "007bff"
+      isError:
+        type: boolean
+        example: false

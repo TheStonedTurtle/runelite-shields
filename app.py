@@ -2,11 +2,15 @@ import json
 import struct
 import requests
 
-from flask import Flask
+from flask import Flask, render_template
+from flask_swagger_ui import get_swaggerui_blueprint
 from apscheduler.schedulers.background import BackgroundScheduler
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static')
 scheduler = BackgroundScheduler()
+
+swaggerui_blueprint = get_swaggerui_blueprint('/api/docs', '/static/api.yaml')
+app.register_blueprint(swaggerui_blueprint)
 
 authors = {}
 counts = {}
@@ -53,6 +57,17 @@ def updateCounts():
     stats = {k: v for k, v in sorted(stats.items(), key=lambda item: item[1], reverse=True)}
 
 
+@app.route('/')
+def get():
+    return render_template('index.html')
+
+
+@app.route('/leaderboards')
+def getLeaderboards():
+    return render_template('leaderboards.html', cols=["Rank", "Author", "Total Installs"], rows=counts)
+
+
+# API section
 @app.route('/installs/author/<username>')
 def getAuthorInstalls(username):
     username = str(username).strip().lower()
