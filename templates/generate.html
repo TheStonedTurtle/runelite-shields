@@ -1,0 +1,236 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<style>
+html, body{
+    height: 100%;
+}
+
+.generator{
+    margin-top: 5%;
+}
+
+.input-group {
+    justify-content: center;
+}
+
+.input-group > .custom-select {
+    min-width: 100px;
+    max-width: 300px;
+}
+
+.rank, .installs{
+    display: flex;
+    align-items: center;
+}
+
+.text-container {
+    padding: 5px;
+    margin: 5px;
+    background: #222526;
+    border-radius: 3px;
+    box-shadow: white 0px 0px 4px -2px;
+    max-width: 75%;
+    display: flex;
+    min-width: 55px;
+}
+
+.copied{
+    box-shadow: green 0px 0px 4px 0px;
+}
+
+.text-block {
+    white-space: nowrap;
+    overflow-x: scroll;
+    margin-bottom: 0px;
+    margin-right: 5px;
+}
+
+.img-container{
+    min-width: 150px;
+    display: flex;
+}
+</style>
+
+<div>
+    <h3>Generate README Shields</h3>
+    <p class="lead">
+        Generate the GitHub Markdown by selecting a value
+    </p>
+
+    <div class="generator">
+        <h4>Shields by Plugin</h4>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <label class="input-group-text" for="plugin">Plugin</label>
+            </div>
+            <select class="custom-select" name="plugin" id="plugin">
+                {% for o in plugins %}
+                    <option value="{{o}}">{{o}}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div id="pluginOutput">
+            <div class="rank">
+                <div class="img-container"><img src="" /></div>
+                <div class="text-container">
+                    <p class="text-block"></p>
+                    <button id="pluginRankCopy" class="btn btn-dark">
+                        <i class="fa fa-clipboard"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="installs">
+                <div class="img-container"><img src="" /></div>
+                <div class="text-container">
+                    <p class="text-block"></p>
+                    <button id="pluginInstallsCopy" class="btn btn-dark"><i class="fa fa-clipboard"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="generator">
+        <h4>Shields by Author</h4>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <label class="input-group-text" for="author">Author</label>
+            </div>
+            <select class="custom-select" name="author" id="author">
+                {% for o in authors %}
+                    <option value="{{o}}">{{o}}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div id="authorOutput">
+            <div class="rank">
+                <div class="img-container"><img src="" /></div>
+                <div class="text-container">
+                    <p class="text-block"></p>
+                    <button id="authorRankCopy" class="btn btn-dark">
+                        <i class="fa fa-clipboard"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="installs">
+                <div class="img-container"><img src="" /></div>
+                <div class="text-container">
+                    <p class="text-block"></p>
+                    <button id="authorInstallsCopy" class="btn btn-dark"><i class="fa fa-clipboard"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JQuery should be loaded from the template -->
+<script type="text/javascript">
+const HUB_URL = "https://runelite.net/plugin-hub";
+
+// ST = ScoreType CAT = Category
+const ST_INSTALLS = "installs";
+const ST_RANK = "rank";
+const CAT_AUTHOR = "author";
+const CAT_PLUGIN = "plugin";
+
+function hubUrl(author) {
+    return `${HUB_URL}/${author}`;
+}
+
+function generateMarkup(imgUrl, destination) {
+    return `[![](${imgUrl})(${destination})`;
+}
+
+function generateImgUrl(scoreType, category, name) {
+    return `http://img.shields.io/endpoint?url=https://i.pluginhub.info/shields/${scoreType}/${category}/${name}`;
+}
+
+function toggleTooltip(ele) {
+    ele.addClass("copied");
+    ele.tooltip('show');
+    // Timeout Tooltip
+    setTimeout(function(){
+        ele.tooltip('hide');
+    }, 7500);
+}
+
+// Generate Plugin markdown
+$('#plugin').on('change', function() {
+    $('#pluginOutput .text-container').removeClass("copied").tooltip('hide');
+
+    var rankImg = $('#pluginOutput .rank img');
+    var rankText = $('#pluginOutput .rank .text-block');
+    var rankUrl = generateImgUrl(ST_RANK, CAT_PLUGIN, this.value);
+    rankImg.prop("src", rankUrl);
+    rankText.text(generateMarkup(rankUrl, HUB_URL));
+
+    var installsImg = $('#pluginOutput .installs img');
+    var installsText = $('#pluginOutput .installs .text-block');
+    var installsUrl = generateImgUrl(ST_INSTALLS, CAT_PLUGIN, this.value);
+    installsImg.prop("src", installsUrl);
+    installsText.text(generateMarkup(installsUrl, hubUrl(this.value)));
+});
+
+$("#pluginRankCopy").on("click", function() {
+    $('.text-container').removeClass("copied").tooltip('hide');
+    navigator.clipboard.writeText($('#pluginOutput .rank .text-block').text());
+    toggleTooltip($('#pluginOutput .rank .text-container'));
+});
+$("#pluginInstallsCopy").on("click", function() {
+    $('.text-container').removeClass("copied").tooltip('hide');
+    navigator.clipboard.writeText($('#pluginOutput .installs .text-block').text());
+    toggleTooltip($('#pluginOutput .installs .text-container'));
+});
+
+// Generate Author markdown
+$('#author').on('change', function() {
+    $('#authorOutput .text-container').removeClass("copied").tooltip('hide');
+
+    var rankImg = $('#authorOutput .rank img');
+    var rankText = $('#authorOutput .rank .text-block');
+    var rankUrl = generateImgUrl(ST_RANK, CAT_AUTHOR, this.value);
+    rankImg.prop("src", rankUrl);
+    rankText.text(generateMarkup(rankUrl, HUB_URL));
+
+    var installsImg = $('#authorOutput .installs img');
+    var installsText = $('#authorOutput .installs .text-block');
+    var installsUrl = generateImgUrl(ST_INSTALLS, CAT_AUTHOR, this.value);
+    installsImg.prop("src", installsUrl);
+    installsText.text(generateMarkup(installsUrl, hubUrl(this.value)));
+});
+
+$("#authorRankCopy").on("click", function() {
+    $('.text-container').removeClass("copied").tooltip('hide');
+    navigator.clipboard.writeText($('#authorOutput .rank .text-block').text());
+    toggleTooltip($('#authorOutput .rank .text-container'));
+});
+$("#authorInstallsCopy").on("click", function() {
+    $('.text-container').removeClass("copied").tooltip('hide');
+    navigator.clipboard.writeText($('#authorOutput .installs .text-block').text());
+    toggleTooltip($('#authorOutput .installs .text-container'));
+});
+
+// Select the first item and trigger the event handler
+$('#plugin').prop("selectedIndex", 0).trigger('change');
+$('#author').prop("selectedIndex", 0).trigger('change');
+
+// Setup all tooltips for copying
+$('.text-container').each(function(){
+    $(this).tooltip({
+        title: "Markdown Copied",
+        container: this,
+        trigger: "manual"
+    });
+});
+$('#generators button').each(function(){
+    $(this).tooltip({
+        title: "Copy to Clipboard",
+        container: this,
+        trigger: "hover"
+    });
+});
+</script>
+
+{% endblock %}

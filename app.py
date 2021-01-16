@@ -67,6 +67,11 @@ def getLeaderboards():
     return render_template('leaderboards.html', cols=["Rank", "Author", "Total Installs"], rows=counts)
 
 
+@app.route('/generate')
+def getGenerate():
+    return render_template('generate.html', plugins=sorted(stats.keys()), authors=sorted(counts.keys()))
+
+
 # API section
 @app.route('/installs/author/<username>')
 def getAuthorInstalls(username):
