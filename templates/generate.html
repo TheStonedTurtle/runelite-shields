@@ -170,7 +170,7 @@ $('#plugin').on('change', function() {
     var installsText = $('#pluginOutput .installs .text-block');
     var installsUrl = generateImgUrl(ST_INSTALLS, CAT_PLUGIN, this.value);
     installsImg.prop("src", installsUrl);
-    installsText.text(generateMarkup(installsUrl, hubUrl(this.value)));
+    installsText.text(generateMarkup(installsUrl, HUB_URL));
 });
 
 $("#pluginRankCopy").on("click", function() {

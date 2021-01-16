@@ -15,6 +15,7 @@ app.register_blueprint(swaggerui_blueprint)
 authors = {}
 counts = {}
 stats = {}
+authorsCased = {}
 
 
 @scheduler.scheduled_job('interval', minutes=15)
@@ -40,6 +41,7 @@ def updateCounts():
         author = plugin['author'].strip().lower()
         authors[plugin['internalName']] = author
         counts[author] = 0
+        authorsCased[author] = plugin['author']
 
     # Grab the recent stats for each plugin
     stats = requests.get("https://api.runelite.net/runelite-" + rl_version + "/pluginhub").json()
@@ -69,7 +71,7 @@ def getLeaderboards():
 
 @app.route('/generate')
 def getGenerate():
-    return render_template('generate.html', plugins=sorted(stats.keys()), authors=sorted(counts.keys()))
+    return render_template('generate.html', plugins=sorted(stats.keys()), authors=sorted(authorsCased.values()))
 
 
 # API section
