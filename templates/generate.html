@@ -145,6 +145,7 @@ function generateMarkup(imgUrl, destination) {
 }
 
 function generateImgUrl(scoreType, category, name) {
+    name = name.replace(" ", "_")
     return `https://img.shields.io/endpoint?url=https://i.pluginhub.info/shields/${scoreType}/${category}/${name}`;
 }
 

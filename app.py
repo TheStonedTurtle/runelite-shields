@@ -77,7 +77,7 @@ def getGenerate():
 # API section
 @app.route('/installs/author/<username>')
 def getAuthorInstalls(username):
-    username = str(username).strip().lower()
+    username = str(username).strip().lower().replace("_", " ")
     if username not in counts:
         return "-1"
 
@@ -95,7 +95,7 @@ def getPluginInstalls(plugin_name):
 
 @app.route('/rank/author/<username>')
 def getAuthorRank(username):
-    username = str(username).strip().lower()
+    username = str(username).strip().lower().replace("_", " ")
     for idx, name in enumerate(counts, start=1):
         if username == name:
             return str(idx)
