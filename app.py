@@ -38,7 +38,7 @@ def updateCounts():
 
     # Link each plugin name to the respective author
     for plugin in manifest:
-        author = plugin['author'].strip().lower()
+        author = plugin['author'].strip().lower().replace("_", " ")
         authors[plugin['internalName']] = author
         counts[author] = 0
         authorsCased[author] = plugin['author']
