@@ -27,7 +27,7 @@ def updateCounts():
 
     # Grab RuneLite version from bootstrap file
     bootstrap = requests.get("https://static.runelite.net/bootstrap.json").json()
-    rl_version = bootstrap['client']['version']
+    rl_version = bootstrap['version']
 
     # Grab the Plugin Hub manifest as a byte array
     manifest = requests.get("https://repo.runelite.net/plugins/" + rl_version + "/manifest.js").content
