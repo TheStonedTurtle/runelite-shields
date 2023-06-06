@@ -30,14 +30,14 @@ def updateCounts():
     rl_version = bootstrap['version']
 
     # Grab the Plugin Hub manifest as a byte array
-    manifest = requests.get("https://repo.runelite.net/plugins/" + rl_version + "/manifest.js").content
+    manifest = requests.get("https://repo.runelite.net/plugins/manifest/" + rl_version + "_full.js").content
 
     # Read and remove the signature. The length is stored in the first 4 bytes
     signature_size = struct.unpack('>i', manifest[0:4])[0]
     manifest = json.loads(manifest[4 + signature_size:])
 
     # Link each plugin name to the respective author
-    for plugin in manifest:
+    for plugin in manifest['display']:
         author = plugin['author'].strip().lower().replace("_", " ")
         authors[plugin['internalName']] = author
         counts[author] = 0
