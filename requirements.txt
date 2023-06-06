@@ -1,11 +1,10 @@
 requests~=2.24.0
 Flask~=1.1.2
 Flask-swagger-ui~=3.36.0
-APScheduler~=3.6.3
+APScheduler~=3.7.0
 click==7.1.2
 Gunicorn==20.0.4
 itsdangerous==1.1.0
 Jinja2==2.11.2
 MarkupSafe==1.1.1
 Werkzeug==1.0.1
-tzlocal==2.1
