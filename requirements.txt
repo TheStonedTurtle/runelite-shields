@@ -1,4 +1,4 @@
-requests~=2.24.0
+requests~=2.31.0
 Flask~=1.1.2
 Flask-swagger-ui~=3.36.0
 APScheduler~=3.7.0
