@@ -2,7 +2,7 @@ import json
 import struct
 import requests
 
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect
 from flask_swagger_ui import get_swaggerui_blueprint
 from apscheduler.schedulers.background import BackgroundScheduler
 
@@ -120,7 +120,7 @@ def getAuthorInstallsBadge(username):
 
 @app.route('/shields/installs/plugin/<plugin_name>')
 def getPluginInstallsBadge(plugin_name):
-    return generateShieldJson(int(getPluginInstalls(plugin_name)))
+    return redirect("https://api.runelite.net/pluginhub/shields/installs/plugin/" + plugin_name, 301)
 
 
 @app.route('/shields/rank/author/<username>')
@@ -130,7 +130,7 @@ def getAuthorRankBadge(username):
 
 @app.route('/shields/rank/plugin/<plugin_name>')
 def getPluginRankBadge(plugin_name):
-    return generateShieldJson(int(getPluginRank(plugin_name)), "Plugin rank")
+    return redirect("https://api.runelite.net/pluginhub/shields/rank/plugin/" + plugin_name, 301)
 
 
 # Utilizes https://shields.io/endpoint to generate the badge dynamically
