@@ -133,8 +133,6 @@ const HUB_URL = "https://runelite.net/plugin-hub";
 // ST = ScoreType CAT = Category
 const ST_INSTALLS = "installs";
 const ST_RANK = "rank";
-const CAT_AUTHOR = "author";
-const CAT_PLUGIN = "plugin";
 
 function hubUrl(author) {
     return `${HUB_URL}/${author}`;
@@ -144,9 +142,14 @@ function generateMarkup(imgUrl, destination) {
     return `[![](${imgUrl})](${destination})`;
 }
 
-function generateImgUrl(scoreType, category, name) {
+function generateImgUrl(scoreType, name) {
     name = name.replaceAll(" ", "_")
-    return `https://img.shields.io/endpoint?url=https://i.pluginhub.info/shields/${scoreType}/${category}/${name}`;
+    return `https://img.shields.io/endpoint?url=https://i.pluginhub.info/shields/${scoreType}/author/${name}`;
+}
+
+function generateRuneliteImgUrl(scoreType, name) {
+    name = name.replaceAll(" ", "_")
+    return `https://img.shields.io/endpoint?url=https://api.runelite.net/pluginhub/shields/${scoreType}/plugin/${name}`;
 }
 
 function toggleTooltip(ele) {
@@ -164,13 +167,13 @@ $('#plugin').on('change', function() {
 
     var rankImg = $('#pluginOutput .rank img');
     var rankText = $('#pluginOutput .rank .text-block');
-    var rankUrl = generateImgUrl(ST_RANK, CAT_PLUGIN, this.value);
+    var rankUrl = generateRuneliteImgUrl(ST_RANK, this.value);
     rankImg.prop("src", rankUrl);
     rankText.text(generateMarkup(rankUrl, HUB_URL));
 
     var installsImg = $('#pluginOutput .installs img');
     var installsText = $('#pluginOutput .installs .text-block');
-    var installsUrl = generateImgUrl(ST_INSTALLS, CAT_PLUGIN, this.value);
+    var installsUrl = generateRuneliteImgUrl(ST_INSTALLS, this.value);
     installsImg.prop("src", installsUrl);
     installsText.text(generateMarkup(installsUrl, HUB_URL));
 });
@@ -192,13 +195,13 @@ $('#author').on('change', function() {
 
     var rankImg = $('#authorOutput .rank img');
     var rankText = $('#authorOutput .rank .text-block');
-    var rankUrl = generateImgUrl(ST_RANK, CAT_AUTHOR, this.value);
+    var rankUrl = generateImgUrl(ST_RANK, this.value);
     rankImg.prop("src", rankUrl);
     rankText.text(generateMarkup(rankUrl, HUB_URL));
 
     var installsImg = $('#authorOutput .installs img');
     var installsText = $('#authorOutput .installs .text-block');
-    var installsUrl = generateImgUrl(ST_INSTALLS, CAT_AUTHOR, this.value);
+    var installsUrl = generateImgUrl(ST_INSTALLS, this.value);
     installsImg.prop("src", installsUrl);
     installsText.text(generateMarkup(installsUrl, hubUrl(this.value)));
 });
